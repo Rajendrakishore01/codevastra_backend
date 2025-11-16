@@ -103,8 +103,13 @@ app.post("/api/registrations/verify", async (req, res) => {
 });
 
 app.get("/api/registrations", async (req, res) => {
-  const regs = await Registration.find().sort({ createdAt: -1 });
-  res.json(regs);
+  try {
+    const regs = await Registration.find().sort({ createdAt: -1 });
+    res.json(regs);
+  } catch (err) {
+    console.error("Error in /api/registrations :", err);
+    res.status(500).json({ message: "Error fetching registrations" });
+  }
 });
 
 const PORT = process.env.PORT || 5000;
